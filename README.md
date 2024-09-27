@@ -113,3 +113,30 @@ cd /vercel/path0/
 pip install -r requirements.txt
 python3.9 manage.py collectstatic --noinput
 
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "quesMaker/wsgi.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+    },
+    {
+      "src": "build_files.sh",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "staticfiles"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "quesMaker/wsgi.py"
+    }
+  ]
+}
